@@ -1,0 +1,197 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    border: none;
+    border-left: 1px solid #24242488;
+    padding: 0;
+    margin: 0;
+    padding-left: 0.25em;
+}
+
+
+
+.field-group>*:not(legend) {
+    padding-left: 0.25em;
+}
+
+
+
+.field {
+    display: grid;
+    grid-template-areas: "label"
+        "input"
+        "helper"
+        "errors";
+    padding: 0.25em;
+    gap: 0.25em;
+}
+
+
+
+.field-label {
+    grid-area: label;
+    cursor: pointer;
+}
+
+
+
+.field-input {
+    grid-area: input;
+    padding: 0.5em;
+    border: 1px solid #24242488;
+    border-radius: 0.25em;
+    box-shadow: none;
+}
+
+
+
+.field-input:focus {
+    border-color: #299fff;
+    box-shadow: rgb(41, 159, 255, 0.2) 0px 7px 29px 0px;
+}
+
+
+
+.field-input:user-invalid {
+    border-color: #e60000;
+    background-color: #e6000033;
+}
+
+
+
+.field-input:user-valid {
+    border-color: #00e600;
+}
+
+
+
+.field-helper {
+    grid-area: helper;
+    font-size: small;
+    opacity: 0.75;
+}
+
+
+
+.field-errors {
+    grid-area: errors;
+    color: #e60000;
+    font-size: small;
+    margin: 0;
+    padding: 0;
+    padding-left: 1em;
+    list-style-type: "❌ ";
+    min-height: 1.2em;
+}
+
+
+
+.array-field-wrapper {
+    display: grid;
+    grid-template-areas: "item-class-selector add-item-button"
+        "items-container items-container";
+    grid-template-columns: 2fr 1fr;
+    gap: 0.5em;
+}
+
+
+
+.array-field-item-class-selector {
+    grid-area: item-class-selector;
+}
+
+
+
+.array-field-add-item-button {
+    grid-area: add-item-button;
+}
+
+
+
+.array-field-items-container {
+    grid-area: items-container;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+
+
+.array-field-item-wrapper {
+    display: grid;
+    grid-template-areas: "input controls";
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.5em;
+}
+
+
+
+.array-field-item-controls {
+    grid-area: controls;
+    display: grid;
+    grid-template-areas: "indicator remove-button"
+        "reorder-buttons reorder-buttons";
+    gap: 0.25em;
+}
+
+
+
+.array-field-item-position-indicator {
+    grid-area: indicator;
+    font-size: small;
+    opacity: 0.75;
+    align-self: center;
+    text-align: center;
+}
+
+
+
+.array-field-item-reorder-arrows-container {
+    grid-area: reorder-buttons;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+}
+
+
+
+.array-field-item-reorder-up-button {
+    grid-area: reorder-up;
+}
+
+
+
+.array-field-item-wrapper .field {
+    grid-area: input;
+}
+
+
+
+.group-field-input {
+    border: none;
+    border-left: 1px solid #24242488;
+    border-radius: 0;
+    padding-left: 0.25em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+
+
+.group-field-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}

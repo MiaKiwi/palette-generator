@@ -1,0 +1,201 @@
+html {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.swatch-card {
+    border: 1px solid black;
+    display: grid;
+    grid-template-areas: "preview"
+        "name";
+    grid-template-rows: auto auto;
+}
+
+.swatch-card .color-preview {
+    grid-area: preview;
+    min-width: 6em;
+    min-height: 6em;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    transition: filter 0.2s;
+    position: relative;
+}
+
+.swatch-card .color-preview .edit-btn {
+    position: absolute;
+    bottom: 0.2em;
+    left: 0.2em;
+    padding: 0.1em 0.3em;
+    border-radius: 0.2em;
+    background-color: rgba(0, 0, 0, 0.125);
+    z-index: 1;
+}
+
+.swatch-card .color-preview .fg-preview {
+    position: absolute;
+    bottom: 0.2em;
+    right: 0.2em;
+    padding: 0.1em 0.3em;
+    font-size: 0.8em;
+    border-radius: 0.2em;
+}
+
+.swatch-card .color-preview .contrast-info {
+    position: absolute;
+    top: 0.2em;
+    left: 0.2em;
+    padding: 0.1em 0.3em;
+    font-size: 0.75em;
+    border-radius: 0.2em;
+    background-color: rgba(0, 0, 0, 0.125);
+}
+
+.swatch-card .color-preview .contrast-info .contrast-ratio::after {
+    content: "?";
+    margin-left: 0.2em;
+    font-size: 0.75em;
+    color: grey;
+    font-weight: bold;
+    border: 2px solid grey;
+    padding: 0 0.2em;
+    border-radius: 100%;
+}
+
+.swatch-card .color-preview .contrast-info .contrast-ratio.fail::after {
+    content: "X";
+    color: red;
+    border-color: red;
+}
+
+.swatch-card .color-preview .contrast-info .contrast-ratio.poor::after {
+    content: "!";
+    color: orange;
+    border-color: orange;
+}
+
+.swatch-card .color-preview .contrast-info .contrast-ratio.good::after {
+    content: "~";
+    color: green;
+    border-color: green;
+}
+
+.swatch-card .color-preview .contrast-info .contrast-ratio.pass::after {
+    content: "✔";
+    color: lime;
+    border-color: lime;
+}
+
+.swatch-card .color-preview:hover {
+    filter: brightness(0.9);
+}
+
+.swatch-card .color-preview:hover::after {
+    content: attr(value);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: black;
+    color: white;
+    padding: 0.2em 0.5em;
+}
+
+.swatch-card .color-preview.copied::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: green;
+    opacity: 0.75;
+}
+
+.swatch-card .color-name {
+    grid-area: name;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.color-card {
+    display: grid;
+    grid-template-areas: "main variants";
+    grid-template-columns: auto auto;
+    gap: 1em;
+    align-items: start;
+    margin: 0.5em;
+}
+
+.color-card .main-swatch {
+    grid-area: main;
+}
+
+.color-card .variants-container {
+    grid-area: variants;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6em, 1fr));
+    gap: 0.5em;
+}
+
+.theme-card {
+    display: grid;
+    grid-template-areas: "title"
+        "colors";
+    grid-template-rows: auto auto;
+    gap: 1em;
+    margin: 0.5em;
+}
+
+.theme-card .theme-title {
+    grid-area: title;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.theme-card .colors-container {
+    grid-area: colors;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.palette-card {
+    display: grid;
+    grid-template-areas: "title"
+        "themes";
+    grid-template-rows: auto auto;
+    gap: 1em;
+    margin: 1em;
+}
+
+.palette-card .palette-title {
+    grid-area: title;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.palette-card .themes-container {
+    grid-area: themes;
+    display: flex;
+    gap: 1em;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.palette-card .themes-container .theme-card {
+    flex: 1 1 auto;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.edit-btn:hover {
+    font-size: 1em;
+}
