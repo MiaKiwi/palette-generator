@@ -107,7 +107,7 @@ export default class ThemeColorForm {
                 }
 
                 // Update palette card
-                themeColor.theme.palette.updatePaletteCard();
+                themeColor.theme.palette.updatePaletteCard(true);
 
                 // Dispatch close-dialog event to close the dialog
                 this.formElement.dispatchEvent(new Event('close-dialog'));
@@ -128,7 +128,7 @@ export default class ThemeColorForm {
                 themeColor.theme.removeColor(themeColor);
 
                 // Update palette card
-                palette.updatePaletteCard();
+                palette.updatePaletteCard(true);
 
                 // Dispatch close-dialog event to close the dialog
                 this.formElement.dispatchEvent(new Event('close-dialog'));

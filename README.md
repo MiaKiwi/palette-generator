@@ -11,6 +11,8 @@ Well you've come to the right place!
 - Add, edit, and remove themes, colors, and variations.
 - Generate CSS files for easy integration into your projects.
 - Export your palettes as JSON files for sharing and backup.
+- Get real-time feedback on WCAG color contrast ratios.
+- Auto-generate foreground colors or pick your own.
 
 ## Structure
 

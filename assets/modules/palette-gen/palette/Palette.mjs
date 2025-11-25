@@ -1,4 +1,6 @@
 import Color from "./Color.mjs";
+import FormDialog from "./inputs/FormDialog.mjs";
+import PaletteThemeForm from "./inputs/PaletteThemeForm.mjs";
 import PaletteTheme from "./PaletteTheme.mjs";
 import ThemeColor from "./ThemeColor.mjs";
 
@@ -15,9 +17,9 @@ export default class Palette {
 
 
 
-    static get _lsItemPrefix() { return 'palette-draft-'; }
+    static _lsItemPrefix() { return 'palette-draft-'; }
 
-    static get _lsIndexKey() { return 'palette-draft-index'; }
+    static _lsIndexKey() { return 'palette-draft-index'; }
 
 
 
@@ -242,43 +244,71 @@ export default class Palette {
 
     /**
      * Creates a palette card HTML element for this palette
+     * @param {boolean} editable Whether the palette card should be editable
      * @returns {HTMLElement} The palette card element
      */
-    createPaletteCard() {
+    createPaletteCard(editable = false) {
         let card = document.createElement('div');
         card.classList.add('palette-card', `palette-card-${this.name.toLowerCase()}`);
+        if (editable) card.classList.add('editable');
 
         let title = document.createElement('h1');
         title.classList.add('palette-title');
-        let titleAnchor = document.createElement('a');
-        titleAnchor.href = '#';
-        titleAnchor.textContent = this.name;
-        title.appendChild(titleAnchor);
+        title.textContent = this.name;
         card.appendChild(title);
 
-        let palette = this;
-        titleAnchor.addEventListener('click', (e) => {
-            // Download CSS when clicking the title
-            e.preventDefault();
+        if (editable) {
+            // Make title editable
+            title.contentEditable = 'true';
+            title.addEventListener('input', (e) => {
+                this.name = title.textContent.trim();
+                this.updatePaletteCard(editable);
+            });
 
-            let cssContent = palette.minifyCss();
-            let blob = new Blob([cssContent], { type: 'text/css' });
-            let url = URL.createObjectURL(blob);
+            // Add button to add new theme
+            let addThemeButton = document.createElement('button');
+            addThemeButton.classList.add('add-theme-btn');
+            addThemeButton.textContent = '+ Add Theme';
+            card.appendChild(addThemeButton);
 
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `${palette.name}.css`;
-            a.click();
+            let palette = this;
 
-            URL.revokeObjectURL(url);
-        });
+            addThemeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let dialog = new FormDialog(new PaletteThemeForm(null), `Add Theme to Palette: ${palette.name}`);
+                dialog.show();
+
+                dialog.form.formElement.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    let values = dialog.form.form.getValues();
+
+                    let newTheme = new PaletteTheme({
+                        name: values['palette-theme-name'],
+                        autoDetect: values['palette-theme-auto-detect'] || false,
+                    });
+
+                    // Add theme to palette
+                    palette.addTheme(newTheme);
+
+                    // Update palette card
+                    palette.updatePaletteCard(editable);
+
+                    // Dispatch close-dialog event to close the dialog
+                    dialog.form.formElement.dispatchEvent(new Event('close-dialog'));
+                });
+            });
+        }
 
         let themesContainer = document.createElement('div');
         themesContainer.classList.add('themes-container');
         card.appendChild(themesContainer);
 
         for (let theme of this._themes) {
-            let themeCard = theme.createThemeCard();
+            let themeCard = theme.createThemeCard(editable);
             themesContainer.appendChild(themeCard);
         }
 
@@ -289,12 +319,13 @@ export default class Palette {
 
     /**
      * Updates the palette card element(s) for this palette
+     * @param {boolean} editable Whether the palette card should be editable
      */
-    updatePaletteCard() {
+    updatePaletteCard(editable = false) {
         let cards = document.querySelectorAll(`.palette-card-${this.name.toLowerCase()}`);
 
         for (let card of cards) {
-            let newCard = this.createPaletteCard();
+            let newCard = this.createPaletteCard(editable);
             card.replaceWith(newCard);
         }
     }
@@ -306,16 +337,16 @@ export default class Palette {
      */
     saveToLocalStorage() {
         // Save palette to local storage
-        let key = this._lsItemPrefix + this.name;
+        let key = Palette._lsItemPrefix() + this.name;
         let value = JSON.stringify(this.toObject());
 
         localStorage.setItem(key, value);
 
         // Update index
-        let index = JSON.parse(localStorage.getItem(this._lsIndexKey)) || [];
+        let index = JSON.parse(localStorage.getItem(Palette._lsIndexKey())) || [];
         if (!index.includes(this.name)) {
             index.push(this.name);
-            localStorage.setItem(this._lsIndexKey, JSON.stringify(index));
+            localStorage.setItem(Palette._lsIndexKey(), JSON.stringify(index));
         }
     }
 
@@ -326,13 +357,13 @@ export default class Palette {
      */
     removeFromLocalStorage() {
         // Remove palette from local storage
-        let key = this._lsItemPrefix + this.name;
+        let key = Palette._lsItemPrefix() + this.name;
 
         localStorage.removeItem(key);
 
         // Update index
-        let index = JSON.parse(localStorage.getItem(this._lsIndexKey)) || [];
+        let index = JSON.parse(localStorage.getItem(Palette._lsIndexKey())) || [];
         index = index.filter(name => name !== this.name);
-        localStorage.setItem(this._lsIndexKey, JSON.stringify(index));
+        localStorage.setItem(Palette._lsIndexKey(), JSON.stringify(index));
     }
 }

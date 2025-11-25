@@ -65,7 +65,7 @@ export default class PaletteThemeForm {
                 paletteTheme.autoDetect = values['palette-theme-auto-detect'];
 
                 // Update palette card
-                paletteTheme.palette.updatePaletteCard();
+                paletteTheme.palette.updatePaletteCard(true);
 
                 // Dispatch close-dialog event to close the dialog
                 this.formElement.dispatchEvent(new Event('close-dialog'));
@@ -86,7 +86,7 @@ export default class PaletteThemeForm {
                 paletteTheme.palette.removeTheme(paletteTheme);
 
                 // Update palette card
-                palette.updatePaletteCard();
+                palette.updatePaletteCard(true);
 
                 // Dispatch close-dialog event to close the dialog
                 this.formElement.dispatchEvent(new Event('close-dialog'));

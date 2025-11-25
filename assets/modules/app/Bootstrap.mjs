@@ -3,6 +3,7 @@ import Palette from "../palette-gen/palette/Palette.mjs";
 import PaletteTheme from "../palette-gen/palette/PaletteTheme.mjs";
 import ThemeColor from "../palette-gen/palette/ThemeColor.mjs";
 import LightnessVariantsGenerator from "../palette-gen/palette/variants/LightnessVariantsGenerator.mjs";
+import ToolBar from "../palette-gen/ToolBar.mjs";
 import ColorValueConverter from "../palette-gen/tools/ColorValueConverter.mjs";
 import ColorWheel from "../palette-gen/tools/ColorWheel.mjs";
 import ConstrastChecker from "../palette-gen/tools/ContrastChecker.mjs";
@@ -16,7 +17,7 @@ const MAIN = document.getElementById('main');
 
 // Get local storage drafts index
 let draftOptions = [];
-let index = localStorage.getItem(Palette._lsIndexKey);
+let index = localStorage.getItem(Palette._lsIndexKey());
 if (index) {
     index = JSON.parse(index);
     for (let name of index) {
@@ -35,7 +36,7 @@ if (draftOptions.length === 0) {
     palette.addTheme(defaultTheme);
 } else {
     // Load the first draft from local storage
-    let draftData = localStorage.getItem(Palette._lsItemPrefix + draftOptions[0]);
+    let draftData = localStorage.getItem(Palette._lsItemPrefix() + draftOptions[0]);
     if (draftData) {
         let draftObj = JSON.parse(draftData);
         palette = Palette.fromObject(draftObj);
@@ -46,6 +47,15 @@ if (draftOptions.length === 0) {
 
 // Create palette card
 if (palette) {
-    let paletteCard = palette.createPaletteCard();
+    let paletteCard = palette.createPaletteCard(true);
     MAIN.appendChild(paletteCard);
 }
+
+
+
+// Create and attach toolbar
+let toolbar = new ToolBar({
+    palette: palette
+});
+
+document.body.prepend(toolbar.createToolBarElement());

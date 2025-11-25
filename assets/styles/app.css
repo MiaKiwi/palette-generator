@@ -1,6 +1,13 @@
-html {
+html,
+body {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+}
+
+.main {
+    margin: 1em;
 }
 
 .swatch-card {
@@ -169,6 +176,12 @@ html {
     margin: 1em;
 }
 
+.palette-card.editable {
+    grid-template-areas: "title"
+        "edit"
+        "themes";
+}
+
 .palette-card .palette-title {
     grid-area: title;
     font-size: 2em;
@@ -198,4 +211,93 @@ html {
 
 .edit-btn:hover {
     font-size: 1em;
+}
+
+.palette-card .add-theme-btn {
+    grid-area: edit;
+}
+
+button {
+    cursor: pointer;
+    padding: 0.5em 1em;
+    font-size: 1em;
+}
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #299fff;
+}
+
+.toolbar-btn {
+    background: none;
+    color: black;
+    border: none;
+    padding: 0.5em 1em;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.toolbar-btn:hover {
+    background-color: #054aaa;
+    color: white;
+}
+
+.add-color-btn,
+.add-theme-btn {
+    background: none;
+    border: 2px dashed #299fff;
+    color: #299fff;
+    font-weight: bold;
+    border-radius: 0.5em;
+}
+
+.dialog-wrapper::backdrop {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(2px);
+}
+
+.dialog-wrapper {
+    border: none;
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+.dialog {
+    display: grid;
+    grid-template-areas: "close"
+        "title"
+        "content";
+    grid-template-rows: auto auto 1fr;
+    gap: 1em;
+}
+
+.dialog .dialog-close-btn {
+    grid-area: close;
+    justify-self: end;
+    background: none;
+    border: none;
+    font-size: 0.8em;
+    cursor: pointer;
+    color: red;
+}
+
+.form-submit-btn {
+    background-color: #299fff;
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    border-radius: 0.25em;
+}
+
+.field-input[type="color"] {
+    padding: 0;
+    border: none;
+    width: 100%;
+    height: 3em;
+    cursor: pointer;
 }

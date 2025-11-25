@@ -192,7 +192,10 @@ export default class PaletteTheme {
     static fromV1Object(obj) {
         if (obj._t !== 'PaletteTheme' || obj._v !== 1) throw new Error('Invalid PaletteTheme v1 object');
 
-        let theme = new PaletteTheme(obj.name);
+        let theme = new PaletteTheme({
+            name: obj.name,
+            autoDetect: obj.autoDetect
+        });
 
         for (let colorObj of obj.colors) {
             let color = ThemeColor.fromObject(colorObj);
@@ -212,8 +215,6 @@ export default class PaletteTheme {
      * @returns {HTMLElement} The theme card element
      */
     createThemeCard(editable = false) {
-        editable = true;
-
         let card = document.createElement('div');
         card.classList.add('theme-card');
 
@@ -290,7 +291,7 @@ export default class PaletteTheme {
                     this.addColor(newColor);
 
                     // Update palette card
-                    this.palette.updatePaletteCard();
+                    this.palette.updatePaletteCard(editable);
 
                     // Dispatch close-dialog event to close the dialog
                     dialog.form.formElement.dispatchEvent(new Event('close-dialog'));
