@@ -301,3 +301,5 @@ button {
     height: 3em;
     cursor: pointer;
 }
+
+.kw-footer{box-sizing: border-box;background-color:var(--bg-90);color:var(--text-10);padding:.5em;display:grid;grid-template-areas:"strapline strapline strapline" "info links links" "notices notices notices";grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto 1fr auto;grid-gap:1em;width:100%;padding-left:max(0.75rem, calc((100% - 80ch) / 2));padding-right:max(0.75rem, calc((100% - 80ch) / 2));font-size:.9em}.kw-footer .strapline{grid-area:strapline;text-align:center}.kw-footer .info{grid-area:info}.kw-footer .links{grid-area:links;display:flex;flex-direction:row;flex-wrap:wrap;gap:1em;height:fit-content}.kw-footer .links a{color:var(--text-10);text-decoration:none}.kw-footer .links a:hover{color:var(--text-20);text-decoration:underline}.kw-footer .notices{grid-area:notices}
