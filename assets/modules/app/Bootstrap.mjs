@@ -54,8 +54,6 @@ if (palette) {
 
 
 // Create and attach toolbar
-let toolbar = new ToolBar({
-    palette: palette
-});
+let toolbar = ToolBar.create(palette);
 
-document.body.prepend(toolbar.createToolBarElement());
+document.body.prepend(toolbar);

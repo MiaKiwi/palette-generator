@@ -1,7 +1,9 @@
 import { CheckboxField } from "../../../formbuilderjs/fields/CheckboxField.mjs";
 import { ColorField } from "../../../formbuilderjs/fields/ColorField.mjs";
+import { NumberField } from "../../../formbuilderjs/fields/NumberField.mjs";
 import { TextField } from "../../../formbuilderjs/fields/TextField.mjs";
 import { Form } from "../../../formbuilderjs/forms/Form.mjs";
+import ColorValueConverter from "../../tools/ColorValueConverter.mjs";
 import ColorValueParser from "../../tools/ColorValueParser.mjs";
 
 
@@ -43,6 +45,18 @@ export default class ColorForm {
                     value: this?.color?.value?.toCssString(),
                     required: true
                 }),
+                new NumberField({
+                    id: 'color-transparency',
+                    name: 'color-transparency',
+                    label: 'Transparency',
+                    helper: 'The transparency level of the color',
+                    value: this?.color ? Math.round(this.color.value.a * 100) : 100,
+                    attributes: {
+                        min: 0,
+                        max: 100,
+                        step: 1
+                    }
+                }),
                 new ColorField({
                     id: 'color-foreground',
                     name: 'color-foreground',
@@ -82,7 +96,11 @@ export default class ColorForm {
                 let values = form.getValues();
 
                 color.name = values['color-name'];
-                color.value = ColorValueParser.parse(values['color-value']);
+                let hexColorValue = ColorValueParser.parse(values['color-value']);
+                let rgbaColorValue = ColorValueConverter.toRgba(hexColorValue);
+                let alpha = parseInt(values['color-transparency']) / 100;
+                rgbaColorValue.a = alpha;
+                color.value = rgbaColorValue;
 
                 if (values['color-generate-fg']) {
                     color.findBestForegroundColor();

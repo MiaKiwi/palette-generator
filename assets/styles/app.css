@@ -4,6 +4,8 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    background-color: white;
+    color: black;
 }
 
 .main {
@@ -303,3 +305,28 @@ button {
 }
 
 .kw-footer{box-sizing: border-box;background-color:var(--bg-90);color:var(--text-10);padding:.5em;display:grid;grid-template-areas:"strapline strapline strapline" "info links links" "notices notices notices";grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto 1fr auto;grid-gap:1em;width:100%;padding-left:max(0.75rem, calc((100% - 80ch) / 2));padding-right:max(0.75rem, calc((100% - 80ch) / 2));font-size:.9em}.kw-footer .strapline{grid-area:strapline;text-align:center}.kw-footer .info{grid-area:info}.kw-footer .links{grid-area:links;display:flex;flex-direction:row;flex-wrap:wrap;gap:1em;height:fit-content}.kw-footer .links a{color:var(--text-10);text-decoration:none}.kw-footer .links a:hover{color:var(--text-20);text-decoration:underline}.kw-footer .notices{grid-area:notices}
+
+pre:has(>code) {
+    background-color: lightgrey;
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+    max-height: 400px;
+}
+
+.btn {
+    background-color: #299fff;
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    border-radius: 0.25em;
+}
+
+.btn:hover {
+    background-color: #054aaa;
+}
+
+.btn:active {
+    background-color: #023f7d;
+}

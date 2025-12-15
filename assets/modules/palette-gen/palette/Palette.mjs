@@ -1,5 +1,6 @@
 import Color from "./Color.mjs";
 import FormDialog from "./inputs/FormDialog.mjs";
+import PaletteForm from "./inputs/PaletteForm.mjs";
 import PaletteThemeForm from "./inputs/PaletteThemeForm.mjs";
 import PaletteTheme from "./PaletteTheme.mjs";
 import ThemeColor from "./ThemeColor.mjs";
@@ -258,11 +259,18 @@ export default class Palette {
         card.appendChild(title);
 
         if (editable) {
-            // Make title editable
-            title.contentEditable = 'true';
-            title.addEventListener('input', (e) => {
-                this.name = title.textContent.trim();
-                this.updatePaletteCard(editable);
+            // Add edit button
+            let editButton = document.createElement('button');
+            editButton.classList.add('edit-btn');
+            editButton.textContent = '✎';
+            title.prepend(editButton);
+
+            editButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let dialog = new FormDialog(new PaletteForm(this), `Edit Palette: ${this.name}`);
+                dialog.show();
             });
 
             // Add button to add new theme
@@ -285,6 +293,12 @@ export default class Palette {
                     e.stopPropagation();
 
                     let values = dialog.form.form.getValues();
+
+                    // Check if theme with the same name already exists
+                    if (palette.getTheme(values['palette-theme-name'])) {
+                        alert(`A theme with the name '${values['palette-theme-name']}' already exists in this palette.`);
+                        return;
+                    }
 
                     let newTheme = new PaletteTheme({
                         name: values['palette-theme-name'],
@@ -320,9 +334,10 @@ export default class Palette {
     /**
      * Updates the palette card element(s) for this palette
      * @param {boolean} editable Whether the palette card should be editable
+     * @param {string} name The name of the palette card(s) to update (defaults to current palette name)
      */
-    updatePaletteCard(editable = false) {
-        let cards = document.querySelectorAll(`.palette-card-${this.name.toLowerCase()}`);
+    updatePaletteCard(editable = false, name = this.name) {
+        let cards = document.querySelectorAll(`.palette-card-${name.toLowerCase()}`);
 
         for (let card of cards) {
             let newCard = this.createPaletteCard(editable);

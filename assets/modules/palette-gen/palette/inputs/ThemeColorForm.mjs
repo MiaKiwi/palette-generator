@@ -1,7 +1,9 @@
 import { CheckboxField } from "../../../formbuilderjs/fields/CheckboxField.mjs";
 import { ColorField } from "../../../formbuilderjs/fields/ColorField.mjs";
+import { NumberField } from "../../../formbuilderjs/fields/NumberField.mjs";
 import { TextField } from "../../../formbuilderjs/fields/TextField.mjs";
 import { Form } from "../../../formbuilderjs/forms/Form.mjs";
+import ColorValueConverter from "../../tools/ColorValueConverter.mjs";
 import ColorValueParser from "../../tools/ColorValueParser.mjs";
 
 
@@ -41,6 +43,18 @@ export default class ThemeColorForm {
                     helper: 'The value of the theme color',
                     value: this?.themeColor?.main?.value?.toCssString(),
                     required: true
+                }),
+                new NumberField({
+                    id: 'theme-color-transparency',
+                    name: 'theme-color-transparency',
+                    label: 'Transparency',
+                    helper: 'The transparency level of the color',
+                    value: this?.themeColor ? Math.round(this.themeColor.main.value.a * 100) : 100,
+                    attributes: {
+                        min: 0,
+                        max: 100,
+                        step: 1
+                    }
                 }),
                 new ColorField({
                     id: 'theme-color-foreground',
@@ -88,7 +102,12 @@ export default class ThemeColorForm {
                 let values = form.getValues();
 
                 mainColor.name = values['theme-color-name'];
-                mainColor.value = ColorValueParser.parse(values['theme-color-value']);
+                
+                let hexColorValue = ColorValueParser.parse(values['theme-color-value']);
+                let rgbaColorValue = ColorValueConverter.toRgba(hexColorValue);
+                let alpha = parseInt(values['theme-color-transparency']) / 100;
+                rgbaColorValue.a = alpha;
+                mainColor.value = rgbaColorValue;
 
                 if (values['theme-color-generate-fg']) {
                     mainColor.findBestForegroundColor();

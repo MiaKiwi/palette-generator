@@ -4,242 +4,353 @@ import Palette from "./palette/Palette.mjs";
 
 export default class ToolBar {
     /**
-     * Creates a new ToolBar instance
-     * @param {Object} params The parameters for the ToolBar
-     * @param {Palette} params.palette The palette this toolbar is associated with
-     * @param {boolean} params.includeExportToJson Whether to include the Export to JSON button
-     * @param {boolean} params.includeExportToCss Whether to include the Export to CSS button
-     * @param {boolean} params.includeExportToMiniCss Whether to include the Export to Minified CSS button
-     * @param {boolean} params.includeSaveToLocal Whether to include the Save to Local Storage button
-     * @param {boolean} params.includeLoadFromLocal Whether to include the Load from Local Storage button
-     * @param {boolean} params.includeImportFromJson Whether to include the Import from JSON button
-     * @param {boolean} params.includeCopyCssToClipboard Whether to include the Copy CSS to Clipboard button
-     * @param {boolean} params.includeCopyMiniCssToClipboard Whether to include the Copy Minified CSS to Clipboard button
-     * @param {boolean} params.includeCopyJsonToClipboard Whether to include the Copy JSON to Clipboard button
-     * 
+     * Creates a toolbar option button
+     * @param {string} labelText The label text for the option
+     * @param {Function} onClick The click event handler for the option
+     * @returns {HTMLButtonElement} The created button element
      */
-    constructor({
-        palette,
-        includeExportToJson = true,
-        includeExportToCss = true,
-        includeExportToMiniCss = true,
-        includeSaveToLocal = true,
-        includeLoadFromLocal = true,
-        includeImportFromJson = true,
-        includeCopyCssToClipboard = true,
-        includeCopyMiniCssToClipboard = true,
-        includeCopyJsonToClipboard = true
-    } = {}) {
-        this.palette = palette;
-        this.includeExportToJson = includeExportToJson;
-        this.includeExportToCss = includeExportToCss;
-        this.includeExportToMiniCss = includeExportToMiniCss;
-        this.includeSaveToLocal = includeSaveToLocal;
-        this.includeLoadFromLocal = includeLoadFromLocal;
-        this.includeImportFromJson = includeImportFromJson;
-        this.includeCopyCssToClipboard = includeCopyCssToClipboard;
-        this.includeCopyMiniCssToClipboard = includeCopyMiniCssToClipboard;
-        this.includeCopyJsonToClipboard = includeCopyJsonToClipboard;
-    }
-
-
-
-    _createExportToJsonButton() {
+    static _createOption(labelText, onClick) {
         let button = document.createElement('button');
         button.type = 'button';
         button.classList.add('toolbar-btn');
-        button.textContent = 'To JSON';
 
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+        let label = document.createElement('span');
+        label.classList.add('toolbar-option-label');
+        label.textContent = labelText;
+        button.appendChild(label);
 
-            // Downlaod palette as JSON file
-            let data = this.palette.toObject();
-            let json = JSON.stringify(data, null, 4);
-
-            let blob = new Blob([json], { type: 'application/json' });
-            let url = URL.createObjectURL(blob);
-
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `${this.palette.name}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
+        button.addEventListener('click', onClick);
 
         return button;
     }
 
 
 
-    _createExportToCssButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'To CSS';
-
-        button.addEventListener('click', (e) => {
+    static _createToCssOption(palette) {
+        let onClick = (e) => {
             e.preventDefault();
-            e.stopPropagation();
 
-            // Download palette as CSS file
-            let css = this.palette.css();
+            // Create a dialog to show export options
+            let wrapper = document.createElement('dialog');
+            wrapper.classList.add('dialog-wrapper');
 
-            let blob = new Blob([css], { type: 'text/css' });
-            let url = URL.createObjectURL(blob);
+            let dialog = document.createElement('div');
+            dialog.classList.add('dialog');
 
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `${this.palette.name}.css`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
+            let title = document.createElement('h2');
+            title.textContent = 'Export Palette to CSS';
+            dialog.appendChild(title);
 
-        return button;
-    }
+            let cssOutputPre = document.createElement('pre');
+            let cssOutputCode = document.createElement('code');
+            cssOutputCode.dataset.minified = 'true';
+            cssOutputPre.appendChild(cssOutputCode);
+            cssOutputCode.textContent = palette.minifyCss();
+            dialog.appendChild(cssOutputPre);
 
-
-
-    _createSaveToLocalButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'Save to Local';
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            this.palette.saveToLocalStorage();
-        });
-
-        return button;
-    }
-
-
-
-    _createExportToMiniCssButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'To Minified CSS';
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Download palette as minified CSS file
-            let css = this.palette.minifyCss();
-
-            let blob = new Blob([css], { type: 'text/css' });
-            let url = URL.createObjectURL(blob);
-
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `${this.palette.name}.min.css`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
-
-        return button;
-    }
-
-
-
-    _createCopyCssToClipboardButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'Copy CSS';
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Copy palette CSS to clipboard
-            let css = this.palette.css();
-            navigator.clipboard.writeText(css).then(() => {
-                console.log('CSS copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy CSS: ', err);
+            let minifyToggle = document.createElement('button');
+            minifyToggle.type = 'button';
+            minifyToggle.textContent = 'Toggle Minified/Formatted';
+            minifyToggle.classList.add('btn');
+            minifyToggle.addEventListener('click', () => {
+                if (cssOutputCode.dataset.minified === 'true') {
+                    cssOutputCode.textContent = palette.css();
+                    cssOutputCode.dataset.minified = 'false';
+                } else {
+                    cssOutputCode.textContent = palette.minifyCss();
+                    cssOutputCode.dataset.minified = 'true';
+                }
             });
-        });
+            dialog.appendChild(minifyToggle);
 
-        return button;
-    }
-
-
-
-    _createCopyMiniCssToClipboardButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'Copy Minified CSS';
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Copy palette minified CSS to clipboard
-            let css = this.palette.minifyCss();
-            navigator.clipboard.writeText(css).then(() => {
-                console.log('Minified CSS copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy Minified CSS: ', err);
+            let copyButton = document.createElement('button');
+            copyButton.type = 'button';
+            copyButton.textContent = 'Copy to Clipboard';
+            copyButton.classList.add('btn');
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(cssOutputCode.textContent);
             });
-        });
+            dialog.appendChild(copyButton);
 
-        return button;
-    }
-
-
-
-    _createCopyJsonToClipboardButton() {
-        let button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('toolbar-btn');
-        button.textContent = 'Copy JSON';
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Copy palette JSON to clipboard
-            let data = this.palette.toObject();
-            let json = JSON.stringify(data, null, 4);
-
-            navigator.clipboard.writeText(json).then(() => {
-                console.log('JSON copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy JSON: ', err);
+            let downloadButton = document.createElement('button');
+            downloadButton.type = 'button';
+            downloadButton.textContent = 'Download CSS File';
+            downloadButton.classList.add('btn');
+            downloadButton.addEventListener('click', () => {
+                let name = cssOutputCode.dataset.minified === 'true' ? `${palette.name || 'palette'}.min.css` : `${palette.name || 'palette'}.css`;
+                let blob = new Blob([cssOutputCode.textContent], { type: 'text/css' });
+                let url = URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             });
-        });
+            dialog.appendChild(downloadButton);
 
-        return button;
+            let closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.textContent = 'Close';
+            closeButton.classList.add('dialog-close-btn');
+            closeButton.addEventListener('click', () => {
+                wrapper.close();
+                wrapper.remove();
+            });
+            dialog.appendChild(closeButton);
+
+            wrapper.appendChild(dialog);
+            document.body.appendChild(wrapper);
+
+            wrapper.showModal();
+        };
+
+        return this._createOption('Export to CSS', onClick);
     }
 
 
 
-    createToolBarElement() {
+    static _createToJsonOption(palette) {
+        let onClick = (e) => {
+            e.preventDefault();
+
+            // Create a dialog to show export options
+            let wrapper = document.createElement('dialog');
+            wrapper.classList.add('dialog-wrapper');
+
+            let dialog = document.createElement('div');
+            dialog.classList.add('dialog');
+
+            let title = document.createElement('h2');
+            title.textContent = 'Export Palette to JSON';
+            dialog.appendChild(title);
+
+            let jsonOutputPre = document.createElement('pre');
+            let jsonOutputCode = document.createElement('code');
+            jsonOutputPre.appendChild(jsonOutputCode);
+            jsonOutputCode.textContent = JSON.stringify(palette.toObject(), null, 4);
+            dialog.appendChild(jsonOutputPre);
+
+            let copyButton = document.createElement('button');
+            copyButton.type = 'button';
+            copyButton.textContent = 'Copy to Clipboard';
+            copyButton.classList.add('btn');
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(jsonOutputCode.textContent);
+            });
+            dialog.appendChild(copyButton);
+
+            let downloadButton = document.createElement('button');
+            downloadButton.type = 'button';
+            downloadButton.textContent = 'Download JSON File';
+            downloadButton.classList.add('btn');
+            downloadButton.addEventListener('click', () => {
+                let name = `${palette.name || 'palette'}.json`;
+                let blob = new Blob([jsonOutputCode.textContent], { type: 'application/json' });
+                let url = URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            dialog.appendChild(downloadButton);
+
+            let closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.textContent = 'Close';
+            closeButton.classList.add('dialog-close-btn');
+            closeButton.addEventListener('click', () => {
+                wrapper.close();
+                wrapper.remove();
+            });
+            dialog.appendChild(closeButton);
+
+            wrapper.appendChild(dialog);
+            document.body.appendChild(wrapper);
+
+            wrapper.showModal();
+        };
+
+        return this._createOption('Export to JSON', onClick);
+    }
+
+
+
+    static _createFromJsonOption(palette) {
+        let onClick = (e) => {
+            e.preventDefault();
+
+            // Create a dialog to import palette from JSON
+            let wrapper = document.createElement('dialog');
+            wrapper.classList.add('dialog-wrapper');
+
+            let dialog = document.createElement('div');
+            dialog.classList.add('dialog');
+
+            let title = document.createElement('h2');
+            title.textContent = 'Import Palette from JSON';
+            dialog.appendChild(title);
+
+            let fileInputLabel = document.createElement('label');
+            fileInputLabel.textContent = 'Select JSON File: ';
+            let fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'application/json';
+            fileInputLabel.appendChild(fileInput);
+            dialog.appendChild(fileInputLabel);
+
+            let textInputLabel = document.createElement('label');
+            textInputLabel.textContent = 'Or Paste JSON Here: ';
+            let textInput = document.createElement('textarea');
+            textInput.rows = 10;
+            textInput.cols = 50;
+            textInputLabel.appendChild(textInput);
+            dialog.appendChild(textInputLabel);
+
+            let importButton = document.createElement('button');
+            importButton.type = 'button';
+            importButton.textContent = 'Import Palette';
+            importButton.classList.add('btn');
+
+            importButton.addEventListener('click', () => {
+                let jsonData = null;
+
+                if (fileInput.files.length > 0) {
+                    let file = fileInput.files[0];
+                    let reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            jsonData = JSON.parse(event.target.result);
+                            let importedPalette = Palette.fromObject(jsonData);
+
+                            // Replace current palette data
+                            let oldName = palette.name;
+                            palette = importedPalette;
+                            palette.updatePaletteCard(true, oldName);
+                            alert(`Palette "${palette.name}" imported successfully.`);
+
+                            wrapper.close();
+                            wrapper.remove();
+                        } catch (err) {
+                            alert('Error parsing JSON file: ' + err.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                } else if (textInput.value.trim() !== '') {
+                    try {
+                        jsonData = JSON.parse(textInput.value);
+                        let importedPalette = Palette.fromObject(jsonData);
+                        // Replace current palette data
+                        let oldName = palette.name;
+                        palette = importedPalette;
+                        palette.updatePaletteCard(true, oldName);
+                        alert(`Palette "${palette.name}" imported successfully.`);
+                        wrapper.close();
+                        wrapper.remove();
+                    } catch (err) {
+                        alert('Error parsing JSON data: ' + err.message);
+                    }
+                } else {
+                    alert('Please select a JSON file or paste JSON data.');
+                }
+            });
+            dialog.appendChild(importButton);
+
+            let closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.textContent = 'Close';
+            closeButton.classList.add('dialog-close-btn');
+            closeButton.addEventListener('click', () => {
+                wrapper.close();
+                wrapper.remove();
+            });
+            dialog.appendChild(closeButton);
+
+            wrapper.appendChild(dialog);
+            document.body.appendChild(wrapper);
+
+            wrapper.showModal();
+        };
+
+        return this._createOption('Import from JSON', onClick);
+    }
+
+
+
+    static _createFromLocalStorageOption(palette) {
+        let onClick = (e) => {
+            e.preventDefault();
+
+            // Get local storage drafts index
+            let draftOptions = [];
+            let index = localStorage.getItem(Palette._lsIndexKey());
+
+            if (index) {
+                index = JSON.parse(index);
+
+                for (let name of index) {
+                    draftOptions.push(name);
+                }
+
+                if (draftOptions.length === 0) {
+                    alert('No palettes found in local storage.');
+                    return;
+                }
+
+                // Get the first draft
+                let draftData = localStorage.getItem(Palette._lsItemPrefix() + draftOptions[0]);
+
+                if (draftData) {
+                    let draftObj = JSON.parse(draftData);
+                    let importedPalette = Palette.fromObject(draftObj);
+
+                    // Replace current palette data
+                    let oldName = palette.name;
+                    palette = importedPalette;
+                    palette.updatePaletteCard(true, oldName);
+                    alert(`Palette "${palette.name}" imported from local storage.`);
+                }
+            } else {
+                alert('No palettes found in local storage.');
+            }
+        };
+
+        return this._createOption('Import from Local Storage', onClick);
+    }
+
+
+
+    /**
+     * Creates a toolbar for the given palette
+     * @param {Palette} palette 
+     * @returns {HTMLDivElement} The created toolbar element
+     */
+    static create(palette) {
         let toolbar = document.createElement('div');
         toolbar.classList.add('toolbar');
 
-        if (this.includeExportToJson) toolbar.appendChild(this._createExportToJsonButton())
-        if (this.includeExportToCss) toolbar.appendChild(this._createExportToCssButton())
-        if (this.includeExportToMiniCss) toolbar.appendChild(this._createExportToMiniCssButton())
-        if (this.includeSaveToLocal) toolbar.appendChild(this._createSaveToLocalButton())
-        // if (this.includeLoadFromLocal) toolbar.appendChild(this._createLoadFromLocalButton())
-        // if (this.includeImportFromJson) toolbar.appendChild(this._createImportFromJsonButton())
-        if (this.includeCopyCssToClipboard) toolbar.appendChild(this._createCopyCssToClipboardButton())
-        if (this.includeCopyMiniCssToClipboard) toolbar.appendChild(this._createCopyMiniCssToClipboardButton())
-        if (this.includeCopyJsonToClipboard) toolbar.appendChild(this._createCopyJsonToClipboardButton())
+        // --- Export options ---
+        // To CSS
+        toolbar.appendChild(this._createToCssOption(palette));
+        // To JSON
+        toolbar.appendChild(this._createToJsonOption(palette));
+        // To local storage
+        toolbar.appendChild(this._createOption('Export to Local Storage', (e) => {
+            e.preventDefault();
+
+            palette.saveToLocalStorage();
+            alert(`Palette "${palette.name}" saved to local storage.`);
+        }));
+
+        // --- Import options ---
+        // From JSON
+        toolbar.appendChild(this._createFromJsonOption(palette));
+        // From local storage
+        toolbar.appendChild(this._createFromLocalStorageOption(palette));
 
         return toolbar;
     }

@@ -1,3 +1,4 @@
+import ColorValueConverter from "../tools/ColorValueConverter.mjs";
 import ColorValueParser from "../tools/ColorValueParser.mjs";
 import Color from "./Color.mjs";
 import FormDialog from "./inputs/FormDialog.mjs";
@@ -76,6 +77,27 @@ export default class PaletteTheme {
      */
     hasColor(color) {
         return this._colors.includes(color);
+    }
+
+
+
+    /**
+     * Checks if the theme has a color by name and/or value
+     * @param {string|null} name The name of the color to check (optional)
+     * @param {ColorValue|null} value The value of the color to check (optional)
+     * @returns {boolean} True if the theme has a matching color, false otherwise
+     */
+    hasColorByValues(name = null, value = null) {
+        for (let color of this._colors) {
+            let nameMatch = name ? color.main.name === name : true;
+            let valueMatch = value ? color.main.value.toCssString() === value.toCssString() : true;
+
+            if (nameMatch && valueMatch) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -266,10 +288,20 @@ export default class PaletteTheme {
 
                     let values = dialog.form.form.getValues();
 
-                    let newColor = new ThemeColor(new Color(values['theme-color-name'], ColorValueParser.parse(values['theme-color-value'])), this);
+                    // Check if color with the same name exists
+                    if (this.hasColorByValues(values['theme-color-name'])) {
+                        alert(`A color with the name '${values['theme-color-name']}' already exists in this theme.`);
+                        return;
+                    }
 
-                    console.log(newColor);
+                    let hexColorValue = ColorValueParser.parse(values['theme-color-value']);
 
+                    // Turn to RGBA
+                    let colorValue = ColorValueConverter.toRgba(hexColorValue);
+                    let alpha = parseInt(values['theme-color-transparency']) / 100;
+                    colorValue.a = alpha;
+
+                    let newColor = new ThemeColor(new Color(values['theme-color-name'], colorValue), this);
 
                     if (values['theme-color-generate-fg']) {
                         newColor.main.findBestForegroundColor();
@@ -289,6 +321,16 @@ export default class PaletteTheme {
 
                     // Add color to theme
                     this.addColor(newColor);
+
+                    // Add color to other themes in the palette as well
+                    if (this.palette) {
+                        for (let theme of this.palette.themes) {
+                            if (theme !== this && !theme.hasColorByValues(newColor.main.name)) {
+                                let colorCopy = ThemeColor.fromObject(newColor.toObject());
+                                theme.addColor(colorCopy);
+                            }
+                        }
+                    }
 
                     // Update palette card
                     this.palette.updatePaletteCard(editable);
