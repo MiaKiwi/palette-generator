@@ -20,6 +20,17 @@ export default class ThemeColorForm {
 
 
     _createForm() {
+        let hexValue = null;
+
+        if (this?.themeColor?.main?.value) {
+            hexValue = ColorValueConverter.toHex(this.themeColor.main.value);
+
+            // Remove the transparency for the hex value
+            if (hexValue.value.length > 7) hexValue.value = hexValue.value.slice(0, 7);
+
+            hexValue = hexValue.toCssString();
+        }
+
         let form = new Form({
             id: 'theme-color-form',
             action: '#',
@@ -41,7 +52,7 @@ export default class ThemeColorForm {
                     name: 'theme-color-value',
                     label: 'Theme Color Value',
                     helper: 'The value of the theme color',
-                    value: this?.themeColor?.main?.value?.toCssString(),
+                    value: hexValue,
                     required: true
                 }),
                 new NumberField({
@@ -49,7 +60,7 @@ export default class ThemeColorForm {
                     name: 'theme-color-transparency',
                     label: 'Transparency',
                     helper: 'The transparency level of the color',
-                    value: this?.themeColor ? Math.round(this.themeColor.main.value.a * 100) : 100,
+                    value: this?.themeColor ? Math.round((this.themeColor.main.value?.a ?? 1) * 100) : 100,
                     attributes: {
                         min: 0,
                         max: 100,
@@ -102,7 +113,7 @@ export default class ThemeColorForm {
                 let values = form.getValues();
 
                 mainColor.name = values['theme-color-name'];
-                
+
                 let hexColorValue = ColorValueParser.parse(values['theme-color-value']);
                 let rgbaColorValue = ColorValueConverter.toRgba(hexColorValue);
                 let alpha = parseInt(values['theme-color-transparency']) / 100;

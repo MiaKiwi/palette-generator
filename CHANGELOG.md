@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [STVP](https://mia.kiwi/projects/stvp).
 
+## [25.2.4] - 2025-12-15
+
+### Fixed
+
+- Toolbar being dissociated from the palette when importing
+- Color picker not working because of format and transparency issue
+
+
+
 ## [25.2.3] - 2025-12-15
 
 ### Added

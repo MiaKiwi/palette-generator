@@ -21,6 +21,17 @@ export default class ColorForm {
 
 
     _createForm() {
+        let hexValue = null;
+
+        if (this?.color?.value) {
+            hexValue = ColorValueConverter.toHex(this.color.value);
+
+            // Remove the transparency for the hex value
+            if (hexValue.value.length > 7) hexValue.value = hexValue.value.slice(0, 7);
+
+            hexValue = hexValue.toCssString();
+        }
+
         let form = new Form({
             id: 'color-form',
             action: '#',
@@ -42,7 +53,7 @@ export default class ColorForm {
                     name: 'color-value',
                     label: 'Color Value',
                     helper: 'The value of the color',
-                    value: this?.color?.value?.toCssString(),
+                    value: hexValue,
                     required: true
                 }),
                 new NumberField({
@@ -50,7 +61,7 @@ export default class ColorForm {
                     name: 'color-transparency',
                     label: 'Transparency',
                     helper: 'The transparency level of the color',
-                    value: this?.color ? Math.round(this.color.value.a * 100) : 100,
+                    value: this?.color ? Math.round((this.color.value?.a ?? 1) * 100) : 100,
                     attributes: {
                         min: 0,
                         max: 100,

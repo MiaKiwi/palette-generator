@@ -231,6 +231,10 @@ export default class ToolBar {
                             let oldName = palette.name;
                             palette = importedPalette;
                             palette.updatePaletteCard(true, oldName);
+
+                            // Recreate the toolbar
+                            ToolBar.attach(palette);
+
                             alert(`Palette "${palette.name}" imported successfully.`);
 
                             wrapper.close();
@@ -248,7 +252,12 @@ export default class ToolBar {
                         let oldName = palette.name;
                         palette = importedPalette;
                         palette.updatePaletteCard(true, oldName);
+
+                        // Recreate the toolbar
+                        ToolBar.attach(palette);
+
                         alert(`Palette "${palette.name}" imported successfully.`);
+
                         wrapper.close();
                         wrapper.remove();
                     } catch (err) {
@@ -312,6 +321,10 @@ export default class ToolBar {
                     let oldName = palette.name;
                     palette = importedPalette;
                     palette.updatePaletteCard(true, oldName);
+
+                    // Recreate the toolbar
+                    ToolBar.attach(palette);
+
                     alert(`Palette "${palette.name}" imported from local storage.`);
                 }
             } else {
@@ -331,6 +344,7 @@ export default class ToolBar {
      */
     static create(palette) {
         let toolbar = document.createElement('div');
+        toolbar.id = 'toolbar';
         toolbar.classList.add('toolbar');
 
         // --- Export options ---
@@ -353,5 +367,29 @@ export default class ToolBar {
         toolbar.appendChild(this._createFromLocalStorageOption(palette));
 
         return toolbar;
+    }
+
+
+
+    /**
+     * Destroys the toolbar element
+     */
+    static destroy() {
+        let toolbar = document.getElementById('toolbar');
+        if (toolbar) {
+            toolbar.remove();
+        }
+    }
+
+
+
+    /**
+     * Attaches the toolbar to the document body
+     * @param {Palette} palette The palette to associate with the toolbar
+     */
+    static attach(palette) {
+        this.destroy();
+        let toolbar = this.create(palette);
+        document.body.prepend(toolbar);
     }
 }
