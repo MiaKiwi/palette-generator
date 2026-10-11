@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [STVP](https://mia.kiwi/projects/stvp).
 
+## [26.3.0] - 2026-10-11
+
+### Added
+
+- [KWUI](https://github.com/MiaKiwi/kwui) dependency for upcoming UI make-over
+
+### Changed
+
+- `HexColorValue` and `ColorValueConverter` hex mode now omit opacity from hexadecimal color strings if it's set to full
+
+### Deprecated
+
+- UI system built into palette objects will be replaced by standalone KWUI system
+
+### Fixed
+
+- Color selector with `null` list attribute hides color picker in some browsers
+
+
+
 ## [25.2.4] - 2025-12-15
 
 ### Fixed
