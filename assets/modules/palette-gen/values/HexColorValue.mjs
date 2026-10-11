@@ -37,7 +37,20 @@ export default class HexColorValue extends ColorValue {
         let value = this.value.startsWith('#') ? this.value : `#${this.value}`;
 
         if (value.length === 9 && value.toLowerCase().endsWith('ff')) value = value.slice(0, 7);
-        
+
+        if (value.length === 9 &&
+            value[1] === value[2] &&
+            value[3] === value[4] &&
+            value[5] === value[6] &&
+            value[7] === value[8]) {
+            value = '#' + value[1] + value[3] + value[5] + value[7];
+        } else if (value.length === 7 &&
+            value[1] === value[2] &&
+            value[3] === value[4] &&
+            value[5] === value[6]) {
+            value = '#' + value[1] + value[3] + value[5];
+        }
+
         return value;
     }
 

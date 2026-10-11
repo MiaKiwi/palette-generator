@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [STVP](https://mia.kiwi/projects/stvp).
 
+## [26.3.2] - 2026-10-11
+
+### Added
+
+- `CTX`, `EVT`, `NOTIF` app singletons
+- Components for color swatches, theme colors, themes, and palettes
+- Ability to remove colors and themes in the UI, reflected in the app context palette
+- New styling
+
+### Changed
+
+- Moved bootstrap to `modules/` directory
+- Updated index file
+- Bootstrap to use new context and UI system
+- Colors now use `preferredColorOutputFormat` option when exported, still falls back to hexadecimal when minifying output
+- Hexadecimal color values try to reduce repeated values (e.g. #55667788 becomes #5678)
+
+
+
 ## [26.3.1] - 2026-10-11
 
 ### Added

@@ -5,31 +5,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palette Generator | mia.kiwi</title>
-    <link rel="stylesheet" href="assets/styles/app.css">
-    <link rel="stylesheet" href="assets/styles/fields.css">
-    <script type="module" src="assets/modules/app/Bootstrap.mjs"></script>
     <link rel="shortcut icon" href="https://mia.kiwi/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/styles/fields.min.css">
+    <link rel="stylesheet" href="assets/styles/kwui.min.css">
+    <link rel="stylesheet" href="assets/styles/palette.min.css">
+    <link rel="stylesheet" href="assets/styles/footer.min.css">
+    <style id="kw-comp-css"></style>
+    <link rel="stylesheet" href="assets/styles/main.css">
+    <script type="module" src="assets/modules/Bootstrap.mjs"></script>
+    <meta name="og:image" content="https://static.mia.kiwi/images/emblem-opaque.png">
+    <meta name="og:title" content="Palette Generator | mia.kiwi">
+    <meta name="author" content="mia.kiwi">
 </head>
 
 <body>
-    <main id="main" class="main"></main>
+    <main class="main" id="app"></main>
 
-    <footer class="kw-footer">
-        <div class="strapline">
-            <p></p>
-        </div>
-        <div class="info">
-            <p style="margin-top: 0;">Palette Generator <span style="opacity: 0.5;">• 25.2.4</span></p>
-        </div>
-        <div class="links">
-            <a href="https://mia.kiwi/projects/kiwi.mia.0020/" target="_blank" rel="noopener noreferrer">Project Page</a>
-            <a href="https://github.com/miakiwi/palette-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://mia.kiwi" target="_blank" rel="noopener noreferrer">My Website</a>
-            <a href="https://delan.sh" target="_blank" rel="noopener noreferrer">My Other Website</a>
-        </div>
-        <div class="notices">
-            <p style="text-align: center;">© 2025 DELAN Mia. All rights reserved.</p>
-            <p></p>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section" id="footer-about-app">
+                <div>
+                    <p>kiwi.mia.0020<span class="footer-muted"> | </span> palette-generator<span class="footer-muted footer-small">&nbsp;&bull;&nbsp;2026.3</span></p>
+                </div>
+                <ul class="footer-links-group">
+                    <li><a href="https://www.mia.kiwi/projects/kiwi.mia.0020" target="_blank" rel="noopener noreferrer" class="footer-link">About palette-generator</a></li>
+                    <li><span class="footer-muted footer-small">&bull;</span></li>
+                    <li><a href="https://www.github.com/miakiwi/palette-generator" target="_blank" rel="noopener noreferrer" class="footer-link">Repository</a></li>
+                    <li><span class="footer-muted footer-small">&bull;</span></li>
+                    <li><a href="https://www.github.com/miakiwi/palette-generator/blob/main/LICENSE.md" target="_blank" rel="noopener noreferrer" class="footer-link">License</a></li>
+                </ul>
+            </div>
+            <div class="footer-section" id="footer-links">
+                <ul class="footer-links-group vertical" title="Websites">
+                    <li><a href="https://www.mia.kiwi/" target="_blank" rel="noopener noreferrer" class="footer-link">mia.kiwi</a></li>
+                    <li><a href="https://www.delan.sh/" target="_blank" rel="noopener noreferrer" class="footer-link">delan.sh</a></li>
+                </ul>
+                <ul class="footer-links-group vertical" title="Publications">
+                    <li><a href="https://quill.mia.kiwi/#blog" target="_blank" rel="noopener noreferrer" class="footer-link">Blog</a></li>
+                    <li><a href="https://quill.mia.kiwi/#docs" target="_blank" rel="noopener noreferrer" class="footer-link">Docs</a></li>
+                    <li><a href="https://quill.mia.kiwi/#projects" target="_blank" rel="noopener noreferrer" class="footer-link">Projects</a></li>
+                    <li><a href="https://quill.mia.kiwi/feed" target="_blank" rel="noopener noreferrer" class="footer-link">RSS Feed</a></li>
+                </ul>
+                <ul class="footer-links-group vertical" title="Projects">
+                    <li><a href="https://www.mia.kiwi/kapir" target="_blank" rel="noopener noreferrer" class="footer-link">KAPIR</a></li>
+                    <li><a href="https://quill.mia.kiwi/#a2326b3e-a38e-4eaa-9bdf-f8961144144b" target="_blank" rel="noopener noreferrer" class="footer-link">KPF</a></li>
+                    <li><a href="https://www.mia.kiwi/projects/" target="_blank" rel="noopener noreferrer" class="footer-link">More&hellip;</a></li>
+                </ul>
+                <ul class="footer-links-group vertical" title="Tools">
+                    <li><a href="https://www.mia.kiwi/tools/abgen" target="_blank" rel="noopener noreferrer" class="footer-link">Abbreviator</a></li>
+                    <li><a href="https://www.mia.kiwi/tools/palette-generator" target="_blank" rel="noopener noreferrer" class="footer-link">Palette Generator</a></li>
+                    <li><a href="https://www.mia.kiwi/tools/greensill-editor" target="_blank" rel="noopener noreferrer" class="footer-link">Greensill Editor</a></li>
+                    <li><a href="https://www.mia.kiwi/tools/rengine" target="_blank" rel="noopener noreferrer" class="footer-link">Resolutions Generator</a></li>
+                    <li><a href="https://www.mia.kiwi/tools/" target="_blank" rel="noopener noreferrer" class="footer-link">More…</a></li>
+                </ul>
+            </div>
+            <div class="footer-section" id="footer-branding">
+                <div id="footer-brand">
+                    <img src="https://static.mia.kiwi/images/emblem-opaque.png" alt="mia.kiwi">
+                    <ul class="footer-links-group vertical">
+                        <li><a href="https://www.mia.kiwi" target="_blank" rel="noopener noreferrer" class="footer-link">MIA.KIWI</a></li>
+                        <li><a href="https://www.delan.sh" target="_blank" rel="noopener noreferrer" class="footer-link">DELAN.SH</a></li>
+                    </ul>
+                </div>
+                <p>Made with &#10084;&#65039; by &#129373; in &#9968;&#65039;&#127851;&#127464;&#127469;</p>
+            </div>
+            <div class="footer-section" id="footer-legal">
+                <p>&copy; 2026 Mia Delan. All rights reserved.</p>
+                <p class="footer-muted footer-small"><i class="fa-solid fa-sack-xmark"></i>&nbsp;This is a private, non-commercial website.</p>
+                <!-- <ul class="footer-links-group">
+                    <li><a href="https://www.mia.kiwi/privacy" target="_blank" rel="noopener noreferrer" class="footer-link">Privacy Policy</a></li>
+                    <li><span class="footer-muted footer-small">&bull;</span></li>
+                    <li><a href="https://www.mia.kiwi/data-protection" target="_blank" rel="noopener noreferrer" class="footer-link">Data Protection</a></li>
+                    <li><span class="footer-muted footer-small">&bull;</span></li>
+                    <li><a href="https://www.mia.kiwi/impressum" target="_blank" rel="noopener noreferrer" class="footer-link">Impressum</a></li>
+                </ul> -->
+            </div>
+            <div class="footer-section" id="footer-socials">
+                <ul class="footer-links-group">
+                    <li><a href="https://bsky.app/profile/mia.kiwi" target="_blank" rel="noopener noreferrer" class="footer-link" title="Bluesky"><i class="fa-brands fa-bluesky"></i></a></li>
+                    <li><a href="https://github.com/miakiwi/" target="_blank" rel="noopener noreferrer" class="footer-link" title="Github"><i class="fa-brands fa-github"></i></a></li>
+                    <li><a href="https://www.openstreetmap.org/relation/51701" target="_blank" rel="noopener noreferrer" class="footer-link" title="Location"><i class="fa-solid fa-location-dot"></i></a></li>
+                    <!-- <li><a href="https://www.mia.kiwi/contact" target="_blank" rel="noopener noreferrer" class="footer-link" title="Contact"><i class="fa-solid fa-address-book"></i></a></li> -->
+                </ul>
+            </div>
         </div>
     </footer>
 

@@ -1,3 +1,4 @@
+import CTX from "../../app/CTX.mjs";
 import ColorValueConverter from "../tools/ColorValueConverter.mjs";
 import ColorValueParser from "../tools/ColorValueParser.mjs";
 import ColorWheel from "../tools/ColorWheel.mjs";
@@ -95,9 +96,8 @@ export default class Color {
      * @returns {string} The CSS declaration
      */
     getCssDeclaration(minified = false) {
-        // Convert value to Hex to make it more compact
-        let valueString = minified ? ColorValueConverter.toHex(this.value).toCssString() : this.value.toCssString();
-
+        let preferredOutput = ColorValueConverter.to(this.value, CTX.options.preferredColorOutputFormat).toCssString();
+        let valueString = minified ? ColorValueConverter.toHex(this.value).toCssString() : preferredOutput;
         let space = minified ? '' : ' ';
 
         return `${this.getCssVariableName()}:${space}${valueString};`;
@@ -111,9 +111,8 @@ export default class Color {
      * @returns {string} The CSS declaration for the foreground color
      */
     getFgCssDeclaration(minified = false) {
-        // Convert value to Hex to make it more compact
-        let valueString = minified ? ColorValueConverter.toHex(this.fg).toCssString() : this.fg.toCssString();
-
+        let preferredOutput = ColorValueConverter.to(this.fg, CTX.options.preferredColorOutputFormat).toCssString();
+        let valueString = minified ? ColorValueConverter.toHex(this.fg).toCssString() : preferredOutput;
         let space = minified ? '' : ' ';
 
         return `${this.getFgCssVariableName()}:${space}${valueString};`;
