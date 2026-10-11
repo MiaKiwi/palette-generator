@@ -1,0 +1,6 @@
+[submodule "assets/modules/kwui"]
+	path = assets/modules/kwui
+	url = https://github.com/miakiwi/kwui
+[submodule "assets/modules/kapir"]
+	path = assets/modules/kapir
+	url = https://github.com/MiaKiwi/kapirjs

@@ -103,6 +103,8 @@ export default class ColorValueConverter {
         let bHex = b.toString(16).padStart(2, '0');
         let aHex = Math.round(a * 255).toString(16).padStart(2, '0');
 
+        if (a === 1) aHex = '';
+
         return new HexColorValue(`#${rHex}${gHex}${bHex}${aHex}`);
     }
 

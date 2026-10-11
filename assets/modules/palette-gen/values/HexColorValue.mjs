@@ -34,7 +34,11 @@ export default class HexColorValue extends ColorValue {
 
     toCssString() {
         // Ensure leading '#'
-        return this.value.startsWith('#') ? this.value : `#${this.value}`;
+        let value = this.value.startsWith('#') ? this.value : `#${this.value}`;
+
+        if (value.length === 9 && value.toLowerCase().endsWith('ff')) value = value.slice(0, 7);
+        
+        return value;
     }
 
 

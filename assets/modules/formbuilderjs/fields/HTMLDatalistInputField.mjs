@@ -14,7 +14,7 @@ export class HTMLDatalistInputField extends HTMLInputField {
         super(params);
 
         this.datalist = datalist;
-        this.attributes.list = this.datalist ? this.datalist.id : null;
+        if (this.attributes.list) this.datalist = this.attributes.list.id;
     }
 
 
