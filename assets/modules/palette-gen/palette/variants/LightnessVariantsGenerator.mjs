@@ -20,8 +20,7 @@ export default class LightnessVariantsGenerator extends VariantsGenerator {
         step: 10
     }) {
         let main = themeColor.main;
-        let themeName = themeColor?.theme?.name || 'light';
-        let isDark = themeName.toLowerCase().startsWith('dark-') || themeName.toLowerCase() === 'dark';
+        let isDark = themeColor?.theme?.isDark() ?? false;
 
         // Convert the main color to HSLA
         let hslaValue = ColorValueConverter.toHsla(main.value);

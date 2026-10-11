@@ -137,18 +137,30 @@ export default class PaletteTheme {
 
 
     /**
+     * Checks if the theme is considered 'dark'
+     * @returns {boolean} True if dark, false otherwise
+     */
+    isDark() {
+        return this.name.toLowerCase() === 'dark' || this.name.toLowerCase().startsWith('dark-');
+    }
+
+
+
+    /**
      * Generates CSS declaration lines for the palette theme
+     * @param {boolean} [minified=false] Whether to minify the output
      * @returns {string[]} The CSS declaration lines
      */
-    getCssDeclarationLines() {
+    getCssDeclarationLines(minified = false) {
         let cssLines = [];
 
-        cssLines.push(`/* THEME '${this.name}' [${(new Date()).toISOString().split("T")[0]}] */`);
+        if (!minified) cssLines.push(`/* THEME '${this.name}' [${(new Date()).toISOString().split("T")[0]}] */`);
+        let space = minified ? '' : ' ';
 
-        this.autoDetect ? cssLines.push(`@media (prefers-color-scheme: ${this.name}) {`, ':root {') : cssLines.push(`.theme-${this.name} {`);
+        this.autoDetect ? cssLines.push(`@media${space}(prefers-color-scheme: ${this.name})${space}{`, ':root${space}{') : cssLines.push(`.theme-${this.name}${space}{`);
 
         for (let color of this.colors) {
-            let colorLines = color.getCssDeclarationLines();
+            let colorLines = color.getCssDeclarationLines(minified);
             cssLines.push(...colorLines);
         }
 

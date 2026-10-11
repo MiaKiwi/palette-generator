@@ -91,26 +91,32 @@ export default class Color {
 
     /**
      * Generates the CSS declaration for this color
+     * @param {boolean} [minified=false] Whether to minify the output
      * @returns {string} The CSS declaration
      */
-    getCssDeclaration() {
+    getCssDeclaration(minified = false) {
         // Convert value to Hex to make it more compact
-        let valueString = ColorValueConverter.toHex(this.value).toCssString();
+        let valueString = minified ? ColorValueConverter.toHex(this.value).toCssString() : this.value.toCssString();
 
-        return `${this.getCssVariableName()}: ${valueString};`;
+        let space = minified ? '' : ' ';
+
+        return `${this.getCssVariableName()}:${space}${valueString};`;
     }
 
 
 
     /**
      * Generates the CSS declaration for the foreground color
+     * @param {boolean} [minified=false] Whether to minify the output
      * @returns {string} The CSS declaration for the foreground color
      */
-    getFgCssDeclaration() {
+    getFgCssDeclaration(minified = false) {
         // Convert value to Hex to make it more compact
-        let valueString = ColorValueConverter.toHex(this.fg).toCssString();
+        let valueString = minified ? ColorValueConverter.toHex(this.fg).toCssString() : this.fg.toCssString();
 
-        return `${this.getFgCssVariableName()}: ${valueString};`;
+        let space = minified ? '' : ' ';
+
+        return `${this.getFgCssVariableName()}:${space}${valueString};`;
     }
 
 

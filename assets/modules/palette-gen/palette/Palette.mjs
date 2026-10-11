@@ -140,15 +140,16 @@ export default class Palette {
 
     /**
      * Generates CSS declaration lines for the theme color
+     * @param {boolean} [minified=false] Whether to minify the output
      * @returns {string[]} The CSS declaration lines
      */
-    getCssDeclarationLines() {
+    getCssDeclarationLines(minified = false) {
         let cssLines = [];
 
-        cssLines.push(`/* PALETTE '${this.name}' [${(new Date()).toISOString().split("T")[0]}] */`);
+        if (!minified) cssLines.push(`/* PALETTE '${this.name}' [${(new Date()).toISOString().split("T")[0]}] */`);
 
         for (let theme of this.themes) {
-            let themeLines = theme.getCssDeclarationLines();
+            let themeLines = theme.getCssDeclarationLines(minified);
             cssLines.push(...themeLines);
         }
 
@@ -162,7 +163,7 @@ export default class Palette {
      * @returns {string} The generated CSS string
      */
     css() {
-        return this.getCssDeclarationLines().join('\n');
+        return this.getCssDeclarationLines(false).join('\n');
     }
 
 
@@ -172,7 +173,7 @@ export default class Palette {
      * @returns {string} The generated minified CSS string
      */
     minifyCss() {
-        return this.getCssDeclarationLines().join('');
+        return this.getCssDeclarationLines(true).join('');
     }
 
 

@@ -76,19 +76,20 @@ export default class ThemeColor {
 
     /**
      * Generates CSS declaration lines for the theme color
+     * @param {boolean} [minified=false] Whether to minify the output
      * @returns {string[]} The CSS declaration lines
      */
-    getCssDeclarationLines() {
+    getCssDeclarationLines(minified = false) {
         let cssLines = [];
 
-        cssLines.push(`/* COLOR '${this.name}' (${this.theme.name}) [${(new Date()).toISOString().split("T")[0]}] */`);
+        if (!minified) cssLines.push(`/* COLOR '${this.name}' (${this.theme.name}) [${(new Date()).toISOString().split("T")[0]}] */`);
 
-        cssLines.push(this.main.getCssDeclaration());
-        if (this.main.fg !== null) cssLines.push(this.main.getFgCssDeclaration());
+        cssLines.push(this.main.getCssDeclaration(minified));
+        if (this.main.fg !== null) cssLines.push(this.main.getFgCssDeclaration(minified));
 
         for (let variant of this.variants) {
-            cssLines.push(variant.getCssDeclaration());
-            if (variant.fg !== null) cssLines.push(variant.getFgCssDeclaration());
+            cssLines.push(variant.getCssDeclaration(minified));
+            if (variant.fg !== null) cssLines.push(variant.getFgCssDeclaration(minified));
         }
 
         return cssLines;

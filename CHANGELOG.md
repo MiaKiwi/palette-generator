@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [STVP](https://mia.kiwi/projects/stvp).
 
+## [26.3.1] - 2026-10-11
+
+### Added
+
+- `minified` argument (defaults to `false`) to `getCssDeclarationLines()` and `getFgCssDeclarationLines()` methods in `Palette`, `PaletteTheme`, `ThemeColor`, and `Color`. Removes CSS comments and omits some formatting spaces.
+- `isDark()` method to `PaletteTheme` to determine whether a theme is considered 'dark'
+
+### Changed
+
+- `LightnessVariantsGenerator` to reference new `isDark()` method
+
+
+
 ## [26.3.0] - 2026-10-11
 
 ### Added
